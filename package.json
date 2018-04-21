@@ -19,10 +19,11 @@
     "semantic-ui-react": "^0.79.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",

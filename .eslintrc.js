@@ -9,7 +9,8 @@ module.exports = {
     rules : {
         "react/jsx-filename-extension": 0,
         "jsx-a11y/label-has-for": 0,
-        "no-console": 0
+        "no-console": 0,
+        "react/prop-types": 0
     },
     "globals": {
         "document": 1
@@ -17,5 +18,8 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": 7,
          "sourceType": "module"
+    },
+    env: {
+        browser: 1
     }
 };
