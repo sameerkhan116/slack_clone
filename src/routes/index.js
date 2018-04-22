@@ -6,7 +6,8 @@ import Register from './Register';
 import Login from './Login';
 import CreateTeam from './CreateTeam';
 
-
+// the routes component that we are using in index.js.
+// we use react-router to create the links with exact paths.
 export default () => (
   <Router>
     <Switch>

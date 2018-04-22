@@ -5,6 +5,11 @@ import { Form, Message, Button, Input, Container, Header } from 'semantic-ui-rea
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
+// this form is similar to the Login form, except we use mobx to keep the state.
+// instead of a state, we use the extendObservable function in the constructor and
+// then give it the fields we would have used in the state. After this, we wrap the
+// class in a higher order 'observer' function when exporting, and this function in
+// turn is wrapped by the graphql higher order function.
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -93,6 +98,7 @@ class Login extends Component {
   }
 }
 
+// the Login mutation
 const LOGIN_MUTATION = gql`
   mutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {

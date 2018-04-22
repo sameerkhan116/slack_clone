@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
 class Register extends Component {
+  // setting the state to handle store the fields and corresponding errors.
   state = {
     username: '',
     usernameError: '',
@@ -13,6 +14,7 @@ class Register extends Component {
     passwordError: '',
   };
 
+  // the onChange function updates the state when any of the field is updated
   onChange = (e) => {
     const { name, value } = e.target;
     this.setState({
@@ -20,6 +22,10 @@ class Register extends Component {
     });
   };
 
+  // the onSubmit function - first, we rest any errors in the state (to remove the red underline)
+  // then we get the usernmae, email and password from the state and pass it as the variables for
+  // the mutate function that we have in props (thanks to the wrapping the function in graphql
+  // higher order function)
   onSubmit = async () => {
     this.setState({
       usernameError: '',
@@ -31,8 +37,11 @@ class Register extends Component {
       variables: { username, email, password },
     });
 
+    // get ok / errors from the response.data.register
     const { ok, errors } = response.data.register;
 
+    // if ok is true, redirect to the home page
+    // otherwise, map the errors and set them in state.
     if (ok) {
       this.props.history.push('/');
     } else {
@@ -51,6 +60,7 @@ class Register extends Component {
       username, email, password, usernameError, emailError, passwordError,
     } = this.state;
 
+    // push any errors (if present), in the errorsList
     const errorList = [];
 
     if (usernameError) {
@@ -112,6 +122,7 @@ class Register extends Component {
   }
 }
 
+// the add user graphql mutation
 const ADD_USER = gql`
   mutation($username: String!, $email: String!, $password: String!) {
     register(username: $username, email: $email, password: $password) {

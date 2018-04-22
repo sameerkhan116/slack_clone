@@ -5,6 +5,7 @@ import { Form, Message, Button, Input, Container, Header } from 'semantic-ui-rea
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
+// pretty similar to the Login component, using MobX.
 class CreateTeam extends Component {
   constructor(props) {
     super(props);
