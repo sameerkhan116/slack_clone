@@ -6,7 +6,11 @@ import Home from './Home';
 import Register from './Register';
 import Login from './Login';
 import CreateTeam from './CreateTeam';
+import ViewTeam from './ViewTeam';
 
+// the isAuthenticated function. We get the token and refresh token from the
+// localStorage and decode it. if it works, we can return true otherwise we
+// return false.
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
   const refreshToken = localStorage.getItem('refreshToken');
@@ -19,6 +23,9 @@ const isAuthenticated = () => {
   return true;
 };
 
+// For protecting routes. We check if the router is authenticated using the
+// isAuthenticated function. If it is, we can render the componennt. Otherwise,
+// we can Redirect the user where we need them to.
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
@@ -40,6 +47,7 @@ export default () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
+      <Route exact path="/view-team" component={ViewTeam} />
       <PrivateRoute exact path="/create-team" component={CreateTeam} />
     </Switch>
   </Router>
