@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloProvider } from 'react-apollo'; // to wrap component in so we can do graphql stuff
 import { ApolloClient } from 'apollo-client'; // for creating the apollo-client
-import { ApolloLink } from 'apollo-link'; // ApolloLink required for ApolloClient
 import { createHttpLink } from 'apollo-link-http'; // to create the httpLink for /graphql enpoint at server
 import { InMemoryCache } from 'apollo-cache-inmemory'; // for caching in the apollo client
+import { ApolloProvider } from 'react-apollo'; // to wrap component in so we can do graphql stuff
 import { setContext } from 'apollo-link-context'; // to set the headers from localStorage
+import { ApolloLink } from 'apollo-link'; // ApolloLink required for ApolloClient
 
 import 'semantic-ui-css/semantic.min.css'; // for semantic ui reeact
 import Routes from './routes'; // the routes component
@@ -35,21 +35,24 @@ const authLink = setContext((_, { headers }) => {
 // chain of links, operation refers to the operation being made. Context contains the
 // metadata and we get it using getContext(). From this, we get the headers and set the
 // token and refreshToken in the localStorage from the headers.
-const afterwareLink = new ApolloLink((operation, forward) => forward(operation).map((res) => {
-  const context = operation.getContext();
-  const { response: { headers } } = context;
+const afterwareLink = new ApolloLink((operation, forward) => {
+  const { headers } = operation.getContext();
+
   if (headers) {
     const token = headers.get('x-token');
     const refreshToken = headers.get('x-refresh-token');
+
     if (token) {
       localStorage.setItem('token', token);
     }
+
     if (refreshToken) {
       localStorage.setItem('refreshToken', refreshToken);
     }
   }
-  return res;
-}));
+
+  return forward(operation);
+});
 
 // the final apollo link creating by concatenating the above links.
 const link = afterwareLink.concat(authLink.concat(httpLink));

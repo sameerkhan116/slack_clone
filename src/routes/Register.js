@@ -51,7 +51,6 @@ class Register extends Component {
       });
       this.setState(err);
     }
-    console.log(this.state);
     console.log(response);
   };
 

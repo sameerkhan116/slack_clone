@@ -7,14 +7,13 @@ const ALL_USERS = gql`
   {
     allUsers {
       id
-      username
       email
     }
   }
 `;
 
 const Home = ({ data: { allUsers = [] } }) => (
-  allUsers.map(u => (<h1 key={u.id}>{u.username}</h1>))
+  allUsers.map(u => (<h1 key={u.id}>{u.email}</h1>))
 );
 
 // passing the Home component to th graphql higher order function.
