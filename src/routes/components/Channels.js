@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Icon } from 'semantic-ui-react';
 
 const ChannelWrapper = styled.div`
   grid-column: 2;
@@ -46,7 +47,7 @@ const user = ({ id, name }) => (
 );
 
 export default ({
-  teamname, username, channels, users,
+  teamname, username, channels, users, onAddChannel,
 }) => (
   <ChannelWrapper>
     <PushLeft>
@@ -55,7 +56,7 @@ export default ({
     </PushLeft>
     <div>
       <SideBarList>
-        <SideBarListHeader>Channels</SideBarListHeader>
+        <SideBarListHeader>Channels <Icon onClick={onAddChannel} name="add circle" /></SideBarListHeader>
         {channels.map(channel)}
       </SideBarList>
     </div>
