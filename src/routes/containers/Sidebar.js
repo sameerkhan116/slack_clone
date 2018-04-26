@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { findIndex } from 'lodash';
 import decode from 'jwt-decode';
@@ -7,6 +6,8 @@ import decode from 'jwt-decode';
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/AddChannelModal';
+
+import { ALL_TEAMS } from '../grapqhl/team';
 
 class Sidebar extends Component {
   state = {
@@ -49,12 +50,13 @@ class Sidebar extends Component {
         key="channel-sidebar"
         teamname={team.name}
         username={username}
+        teamId={team.id}
         channels={team.channels}
         users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
         onAddChannel={this.handleAddChannelClick}
       />,
       <AddChannelModal
-        teamId={currentTeamId}
+        teamId={team.id}
         onClose={this.handleCloseAddChannelModal}
         open={this.state.openAddChannelModal}
         key="sidebar-add-channel-modal"
@@ -62,18 +64,5 @@ class Sidebar extends Component {
     ];
   }
 }
-
-const ALL_TEAMS = gql`
-  {
-    allTeams {
-      id
-      name
-      channels {
-        id
-        name
-      }
-    }
-  }
-`;
 
 export default graphql(ALL_TEAMS)(Sidebar);
