@@ -64,11 +64,11 @@ export default compose(
           name: values.name,
         },
         optimisticResponse: {
-          createChanneL: {
-            _typename: 'Mutation',
+          createChannel: {
+            __typename: 'ChannelResponse',
             ok: true,
             channel: {
-              _typename: 'Channel',
+              __typename: 'Channel',
               id: -1,
               name: values.name,
             },
