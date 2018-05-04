@@ -50,7 +50,7 @@ const user = ({ id, name }) => (
 );
 
 export default ({
-  teamname, username, channels, users, onAddChannel, teamId,
+  teamname, username, channels, users, onAddChannel, teamId, onInvitePeople,
 }) => (
   <ChannelWrapper>
     <PushLeft>
@@ -68,6 +68,11 @@ export default ({
         <SideBarListHeader>Direct Messages</SideBarListHeader>
         {users.map(user)}
       </SideBarList>
+    </div>
+    <div>
+      <a href="#invite-people" onClick={onInvitePeople}>
+        + Invite people
+      </a>
     </div>
   </ChannelWrapper>
 );
