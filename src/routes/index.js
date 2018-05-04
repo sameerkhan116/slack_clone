@@ -47,7 +47,7 @@ export default () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
-      <Route exact path="/view-team/:teamId?/:channelId?" component={ViewTeam} />
+      <PrivateRoute exact path="/view-team/:teamId?/:channelId?" component={ViewTeam} />
       <PrivateRoute exact path="/create-team" component={CreateTeam} />
     </Switch>
   </Router>

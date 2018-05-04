@@ -11,5 +11,13 @@ export const ALL_TEAMS = gql`
       name
     }
   }
+  inviteTeams {
+    id
+    name
+    channels {
+      id
+      name
+    }
+  }
 }
 `;

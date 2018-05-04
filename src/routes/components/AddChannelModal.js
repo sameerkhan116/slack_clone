@@ -16,7 +16,13 @@ const inlineStyle = {
 };
 
 const AddChannelModal = ({
-  open, onClose, values, handleChange, handleBlur, handleSubmit, isSubmitting,
+  open,
+  onClose,
+  values,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  isSubmitting,
 }) => (
   <Modal style={inlineStyle.modal} onClose={onClose} open={open} size="small">
     <Modal.Header>Add a channel</Modal.Header>
