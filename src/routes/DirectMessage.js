@@ -8,32 +8,33 @@ import AppLayout from './components/AppLayout';
 import Header from './components/Header';
 import SendMessage from './components/SendMessage';
 import Sidebar from './containers/Sidebar';
-import MessageContainer from './containers/MessageContainer';
+import DirectMessageContainer from './containers/DirectMessageContainer';
 
 import { ME } from './graphql/team';
 
-const ViewTeam = ({
+const DirectMessage = ({
   mutate,
-  data: { loading, me },
-  match: { params: { teamId, channelId } },
+  data: {
+    loading, me,
+  }, match: {
+    params: {
+      teamId, receiverId,
+    },
+  },
 }) => {
-  if (loading) return null;
+  if (loading) {
+    return null;
+  }
 
-  const { teams, username } = me;
+  const { username, teams } = me;
 
   if (!teams.length) {
-    return (
-      <Redirect to="/create-team" />
-    );
+    return <Redirect to="/create-team" />;
   }
 
   const teamIdInteger = parseInt(teamId, 10);
   const teamIdx = teamIdInteger ? findIndex(teams, ['id', teamIdInteger]) : 0;
   const team = teamIdx === -1 ? teams[0] : teams[teamIdx];
-
-  const channelIdInteger = parseInt(channelId, 10);
-  const channelIdx = channelIdInteger ? findIndex(team.channels, ['id', channelIdInteger]) : 0;
-  const channel = teamIdx === -1 ? team.channels[0] : team.channels[channelIdx];
 
   return (
     <AppLayout>
@@ -45,34 +46,36 @@ const ViewTeam = ({
         team={team}
         username={username}
       />
-      {channel && <Header channelName={channel.name} />}
-      {channel && <MessageContainer channelId={channel.id} />}
-      {channel && <SendMessage
-        placeholder={channel.name}
+      <Header channelName="Someone's username" />
+      <DirectMessageContainer teamId={teamId} receiverId={receiverId} />
+      <SendMessage
+        placeholder={receiverId}
         onSubmit={async (text) => {
           await mutate({
             variables: {
+              receiverId,
               text,
-              channelId: channel.id,
+              teamId,
             },
           });
         }}
-      />}
+      />
     </AppLayout>
   );
 };
 
-const CREATE_MESSAGE = gql`
-  mutation($channelId: Int!, $text: String!) {
-    createMessage(channelId: $channelId, text: $text)
+const CREATE_DIRECT_MESSAGE = gql`
+  mutation($receiverId: Int!, $text: String!, $teamId: Int!) {
+    createDirectMessage(receiverId: $receiverId, text: $text, teamId: $teamId)
   }
 `;
 
 export default compose(
-  graphql(CREATE_MESSAGE),
+  graphql(CREATE_DIRECT_MESSAGE),
   graphql(ME, {
     options: {
       fetchPolicy: 'network-only',
     },
   }),
-)(ViewTeam);
+)(DirectMessage);
+

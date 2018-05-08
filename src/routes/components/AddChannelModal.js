@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import { compose, graphql } from 'react-apollo';
 import { findIndex } from 'lodash';
 
-import { ALL_TEAMS } from '../grapqhl/team';
+import { ME as query } from '../graphql/team';
 
 const inlineStyle = {
   modal: {
@@ -82,11 +82,11 @@ export default compose(
         },
         update: (store, { data: { createChannel: { ok, channel } } }) => {
           if (!ok) return;
-          const data = store.readQuery({ query: ALL_TEAMS });
+          const data = store.readQuery({ query });
           console.log(data);
-          const teamIdx = findIndex(data.allTeams, ['id', teamId]);
-          data.allTeams[teamIdx].channels.push(channel);
-          store.writeQuery({ query: ALL_TEAMS, data });
+          const teamIdx = findIndex(data.me.teams, ['id', teamId]);
+          data.me.teams[teamIdx].channels.push(channel);
+          store.writeQuery({ query, data });
         },
       });
       console.log(response);
