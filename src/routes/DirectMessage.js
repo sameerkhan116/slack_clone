@@ -14,13 +14,8 @@ import { ME } from './graphql/team';
 
 const DirectMessage = ({
   mutate,
-  data: {
-    loading, me,
-  }, match: {
-    params: {
-      teamId, receiverId,
-    },
-  },
+  data: { loading, getUser, me },
+  match: { params: { teamId, receiverId } },
 }) => {
   if (loading) {
     return null;
@@ -46,18 +41,36 @@ const DirectMessage = ({
         team={team}
         username={username}
       />
-      <Header channelName="Someone's username" />
-      <DirectMessageContainer teamId={teamId} receiverId={receiverId} />
+      <Header channelName={getUser.username} />
+      <DirectMessageContainer teamId={team.id} receiverId={receiverId} />
       <SendMessage
         placeholder={receiverId}
         onSubmit={async (text) => {
-          await mutate({
+          const response = await mutate({
             variables: {
               receiverId,
               text,
               teamId,
             },
+            optimisticResponse: {
+              createDirectMessage: true,
+            },
+            update: (proxy) => {
+              const data = proxy.readQuery({ query: ME });
+              const teamIndex = findIndex(data.me.teams, ['id', team.id]);
+              const notAlreadyThere = data.me.teams[teamIndex].directMessageMembers
+                .every(member => member.id !== parseInt(receiverId, 10));
+              if (notAlreadyThere) {
+              data.me.teams[teamIndex].directMessageMembers.push({
+                __typename: 'User',
+                id: receiverId,
+                username: getUser.username,
+              });
+              }
+              proxy.writeQuery({ query: ME, data });
+            },
           });
+          console.log(response);
         }}
       />
     </AppLayout>
@@ -70,12 +83,40 @@ const CREATE_DIRECT_MESSAGE = gql`
   }
 `;
 
+const DIRECT_MESSAGE_ME = gql`
+  query($userId: Int!) {
+    getUser(userId: $userId) {
+      username
+    }
+    me {
+      id
+      username
+      teams {
+        id
+        name
+        admin
+        directMessageMembers {
+          id
+          username
+        }
+        channels {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 export default compose(
   graphql(CREATE_DIRECT_MESSAGE),
-  graphql(ME, {
-    options: {
+  graphql(DIRECT_MESSAGE_ME, {
+    options: ({ match: { params: { receiverId } } }) => ({
+      variables: {
+        userId: receiverId,
+      },
       fetchPolicy: 'network-only',
-    },
+    }),
   }),
 )(DirectMessage);
 

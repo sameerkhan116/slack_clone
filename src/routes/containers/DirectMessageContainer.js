@@ -57,11 +57,11 @@ const DIRECT_MESSAGES = gql`
 `;
 
 export default graphql(DIRECT_MESSAGES, {
-  variables: ({ teamId, receiverId }) => ({
-    teamId,
-    receiverId,
-  }),
-  options: {
+  options: ({ teamId, receiverId }) => ({
     fetchPolicy: 'network-only',
-  },
+    variables: {
+      teamId,
+      receiverId,
+    },
+  }),
 })(DirectMessageContainer);
