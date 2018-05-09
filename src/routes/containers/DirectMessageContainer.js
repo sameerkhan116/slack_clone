@@ -9,6 +9,7 @@ import Messages from '../components/Messages';
 
 // `;
 
+// eslint-disable-next-line react/prefer-stateless-function
 class DirectMessageContainer extends Component {
   // componentWillMount() {
 
