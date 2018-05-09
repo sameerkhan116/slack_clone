@@ -48,7 +48,8 @@ const DirectMessageModal = ({
                 {isOpen ? (
                   <div style={{ border: '1px solid #ccc' }}>
                     {getTeamMembers
-                      .filter(i => !inputValue || i.username.toLowerCase().includes(inputValue.toLowerCase()))
+                      .filter(i => !inputValue ||
+                        i.username.toLowerCase().includes(inputValue.toLowerCase()))
                       .map((item, index) => (
                         <div
                           {...getItemProps({ item })}
