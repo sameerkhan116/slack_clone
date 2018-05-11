@@ -5,19 +5,60 @@ import { Comment } from 'semantic-ui-react';
 
 import Messages from '../components/Messages';
 
-// const NEW_DIRECT_MESSAGE_SUB = gql`
+const NEW_DIRECT_MESSAGE_SUB = gql`
+  subscription($teamId: Int!, $userId: Int!) {
+    newDirectMessage(teamId: $teamId, userId: $userId) {
+      id
+      text
+      sender {
+        username
+      }
+      created_at
+    }
+  }
+`;
 
-// `;
-
-// eslint-disable-next-line react/prefer-stateless-function
 class DirectMessageContainer extends Component {
-  // componentWillMount() {
+  componentWillMount() {
+    const { teamId, receiverId } = this.props;
+    this.unsubscribe = this.subscribe(teamId, receiverId);
+  }
 
-  // }
+  componentWillReceiveProps({ teamId, receiverId }) {
+    if (this.props.teamId !== teamId || this.props.receiverId !== receiverId) {
+      if (this.unsubscribe) {
+        this.unsubscribe();
+      }
+      this.unsubscribe = this.subscribe(teamId, receiverId);
+    }
+  }
 
-  // componentWillUnmount() {
 
-  // }
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
+  subscribe = (teamId, userId) =>
+    this.props.data.subscribeToMore({
+      document: NEW_DIRECT_MESSAGE_SUB,
+      variables: {
+        teamId,
+        userId,
+      },
+      updateQuery: (prev, { subscriptionData: { data } }) => {
+        if (!data) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          directMessages: [...prev.directMessages, data.newDirectMessage],
+        };
+      },
+    })
+
   render() {
     const { data: { loading, directMessages } } = this.props;
     return loading ? null : (
