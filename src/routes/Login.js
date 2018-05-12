@@ -5,6 +5,8 @@ import { Form, Message, Button, Input, Container, Header } from 'semantic-ui-rea
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
+import { wsLink } from '../apollo';
+
 // this form is similar to the Login form, except we use mobx to keep the state.
 // instead of a state, we use the extendObservable function in the constructor and
 // then give it the fields we would have used in the state. After this, we wrap the
@@ -42,7 +44,8 @@ class Login extends Component {
     if (ok) {
       localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
-      this.props.history.push('/');
+      wsLink.subscriptionClient.tryReconnect();
+      this.props.history.push('/view-team');
     } else {
       const err = {};
       errors.forEach(({ path, message }) => {

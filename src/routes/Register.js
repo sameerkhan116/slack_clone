@@ -43,7 +43,7 @@ class Register extends Component {
     // if ok is true, redirect to the home page
     // otherwise, map the errors and set them in state.
     if (ok) {
-      this.props.history.push('/');
+      this.props.history.push('/login');
     } else {
       const err = {};
       errors.forEach(({ path, message }) => {

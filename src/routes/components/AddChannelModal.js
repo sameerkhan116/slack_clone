@@ -23,8 +23,17 @@ const AddChannelModal = ({
   handleBlur,
   handleSubmit,
   isSubmitting,
+  resetForm,
 }) => (
-  <Modal style={inlineStyle.modal} onClose={onClose} open={open} size="small">
+  <Modal
+    style={inlineStyle.modal}
+    onClose={(e) => {
+      resetForm();
+      onClose(e);
+    }}
+    open={open}
+    size="small"
+  >
     <Modal.Header>Add a channel</Modal.Header>
     <Modal.Content>
       <Form>
@@ -33,7 +42,16 @@ const AddChannelModal = ({
         </Form.Field>
         <Form.Group>
           <Button disabled={isSubmitting} onClick={handleSubmit} fluid>Create channel</Button>
-          <Button disabled={isSubmitting} onClick={onClose} fluid>Cancel</Button>
+          <Button
+            disabled={isSubmitting}
+            onClick={(e) => {
+              resetForm();
+              onClose(e);
+            }}
+            fluid
+          >
+            Cancel
+          </Button>
         </Form.Group>
       </Form>
     </Modal.Content>
@@ -91,7 +109,6 @@ export default compose(
       });
       console.log(response);
       onClose();
-      resetForm();
       setSubmitting(false);
     },
   }),
