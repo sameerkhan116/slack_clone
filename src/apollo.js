@@ -1,13 +1,14 @@
 import { ApolloClient } from 'apollo-client'; // for creating the apollo-client
-import { createHttpLink } from 'apollo-link-http'; // to create the httpLink for /graphql enpoint at server
 import { InMemoryCache } from 'apollo-cache-inmemory'; // for caching in the apollo client
 import { setContext } from 'apollo-link-context'; // to set the headers from localStorage
 import { ApolloLink, split } from 'apollo-link'; // ApolloLink required for ApolloClient
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 
+import createFileLink from './createFileLink';
+
 // creating an HTTPLink with the uri pointing to the graphql enpoint of the server
-const httpLink = createHttpLink({
+const httpLink = createFileLink({
   uri: 'http://localhost:3000/graphql',
 });
 

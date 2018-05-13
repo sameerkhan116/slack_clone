@@ -1,12 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withFormik } from 'formik';
-import { Input } from 'semantic-ui-react';
+import { Input, Button, Icon } from 'semantic-ui-react';
+
+import FileUpload from './FileUpload';
 
 const SendMessageWrapper = styled.div`
   grid-column: 3;
-  grid-row: 3;
   margin: 20px;
+  display: grid;
+  grid-template-columns: 40px auto;
 `;
 
 const SendMessage = ({
@@ -18,8 +21,12 @@ const SendMessage = ({
   isSubmitting,
 }) => (
   <SendMessageWrapper>
+    <FileUpload>
+      <Button icon>
+        <Icon name="plus" />
+      </Button>
+    </FileUpload>
     <Input
-      fluid
       placeholder={`Message  #${placeholder}`}
       name="message"
       value={values.message}
