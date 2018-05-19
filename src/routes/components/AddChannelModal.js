@@ -27,6 +27,7 @@ const AddChannelModal = ({
   resetForm,
   setFieldValue,
   teamId,
+  currentUserId,
 }) => (
   <Modal
     style={inlineStyle.modal}
@@ -67,6 +68,7 @@ const AddChannelModal = ({
                 handleChange={(e, { value }) => setFieldValue('members', value)}
                 placeholder="Selected users"
                 teamId={teamId}
+                currentUserId={currentUserId}
               />
               )
           }

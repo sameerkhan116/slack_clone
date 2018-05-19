@@ -36,8 +36,17 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { teams, team, username } = this.props;
+    const {
+      teams, team, username, currentUserId,
+    } = this.props;
     const { openAddChannelModal, openInvitePeopleModal, openDirectMessageModal } = this.state;
+    const regularChannels = [];
+    const dmChannels = [];
+
+    team.channels.forEach((c) => {
+      if (c.dm) dmChannels.push(c);
+      else regularChannels.push(c);
+    });
 
     return [
       <Teams
@@ -50,8 +59,8 @@ class Sidebar extends Component {
         username={username}
         teamId={team.id}
         isOwner={team.admin}
-        channels={team.channels}
-        users={team.directMessageMembers}
+        channels={regularChannels}
+        dmChannels={dmChannels}
         onAddChannel={this.toggleAddChannelModal}
         onInvitePeople={this.toggleInvitePeopleModal}
         directMessageClick={this.toggleDirectMessageModal}
@@ -61,6 +70,7 @@ class Sidebar extends Component {
         onClose={this.toggleAddChannelModal}
         open={openAddChannelModal}
         key="sidebar-add-channel-modal"
+        currentUserId={currentUserId}
       />,
       <InvitePeopleModal
         teamId={team.id}
@@ -73,6 +83,7 @@ class Sidebar extends Component {
         onClose={this.toggleDirectMessageModal}
         open={openDirectMessageModal}
         key="sidebar-direct-message-modal"
+        currentUserId={currentUserId}
       />,
     ];
   }

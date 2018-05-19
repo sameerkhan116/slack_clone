@@ -19,7 +19,7 @@ const ViewTeam = ({
 }) => {
   if (loading) return null;
 
-  const { teams, username } = me;
+  const { id: currentUserId, teams, username } = me;
 
   if (!teams.length) {
     return (
@@ -44,6 +44,7 @@ const ViewTeam = ({
         }))}
         team={team}
         username={username}
+        currentUserId={currentUserId}
       />
       {channel && <Header channelName={channel.name} />}
       {channel && <MessageContainer channelId={channel.id} />}

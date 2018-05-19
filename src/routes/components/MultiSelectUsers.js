@@ -5,7 +5,11 @@ import { Dropdown } from 'semantic-ui-react';
 import { GET_TEAM_MEMBERS } from '../graphql/team';
 
 const MultiSelectUsers = ({
-  data: { loading, getTeamMembers }, value, handleChange, placeholder,
+  data: { loading, getTeamMembers },
+  value,
+  handleChange,
+  placeholder,
+  currentUserId,
 }) =>
   (loading ? null :
     (
@@ -17,7 +21,9 @@ const MultiSelectUsers = ({
         multiple
         search
         selection
-        options={getTeamMembers.map(tm => ({ key: tm.id, value: tm.id, text: tm.username }))}
+        options={getTeamMembers
+          .filter(tm => tm.id !== currentUserId)
+          .map(tm => ({ key: tm.id, value: tm.id, text: tm.username }))}
       />
     ));
 
