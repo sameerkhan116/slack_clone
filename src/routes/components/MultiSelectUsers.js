@@ -5,7 +5,7 @@ import { Dropdown } from 'semantic-ui-react';
 import { GET_TEAM_MEMBERS } from '../graphql/team';
 
 const MultiSelectUsers = ({
-  data: { loading, getTeamMembers },
+  data: { loading, getTeamMembers = [] },
   value,
   handleChange,
   placeholder,

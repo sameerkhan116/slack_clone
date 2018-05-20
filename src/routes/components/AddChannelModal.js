@@ -124,12 +124,13 @@ export default compose(
         },
         optimisticResponse: {
           createChannel: {
-            __typename: 'ChannelResponse',
+            __typename: 'Mutation',
             ok: true,
             channel: {
               __typename: 'Channel',
               id: -1,
               name: values.name,
+              dm: false,
             },
           },
         },
@@ -138,7 +139,11 @@ export default compose(
           const data = store.readQuery({ query });
           console.log(data);
           const teamIdx = findIndex(data.me.teams, ['id', teamId]);
-          data.me.teams[teamIdx].channels.push(channel);
+          data.me.teams[teamIdx].channels.push({
+            __typename: 'Channel',
+            ...channel,
+            dm: false,
+          });
           store.writeQuery({ query, data });
         },
       });

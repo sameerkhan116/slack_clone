@@ -71,10 +71,10 @@ const CREATE_MESSAGE = gql`
 `;
 
 export default compose(
-  graphql(CREATE_MESSAGE),
   graphql(ME, {
     options: {
       fetchPolicy: 'network-only',
     },
   }),
+  graphql(CREATE_MESSAGE),
 )(ViewTeam);

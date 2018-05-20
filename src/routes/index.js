@@ -7,7 +7,6 @@ import Register from './Register';
 import Login from './Login';
 import CreateTeam from './CreateTeam';
 import ViewTeam from './ViewTeam';
-import DirectMessage from './DirectMessage';
 
 // the isAuthenticated function. We get the token and refresh token from the
 // localStorage and decode it. if it works, we can return true otherwise we
@@ -48,7 +47,6 @@ export default () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
-      <PrivateRoute exact path="/view-team/dm/:teamId?/:receiverId" component={DirectMessage} />
       <PrivateRoute exact path="/view-team/:teamId?/:channelId?" component={ViewTeam} />
       <PrivateRoute exact path="/create-team" component={CreateTeam} />
     </Switch>
