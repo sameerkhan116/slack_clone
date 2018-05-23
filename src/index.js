@@ -4,9 +4,9 @@ import { ApolloProvider } from 'react-apollo'; // to wrap component in so we can
 
 import 'semantic-ui-css/semantic.min.css'; // for semantic ui reeact
 
-import client from './apollo';
-import Routes from './routes'; // the routes component
-import registerServiceWorker from './registerServiceWorker'; // for PWA
+import client from './apollo'; // import the client with HTTP and WS set up that we created.
+import Routes from './routes'; // the routes component.
+import registerServiceWorker from './registerServiceWorker'; // for PWA.
 
 const App = (
   <ApolloProvider client={client}>

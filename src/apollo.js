@@ -2,10 +2,10 @@ import { ApolloClient } from 'apollo-client'; // for creating the apollo-client
 import { InMemoryCache } from 'apollo-cache-inmemory'; // for caching in the apollo client
 import { setContext } from 'apollo-link-context'; // to set the headers from localStorage
 import { ApolloLink, split } from 'apollo-link'; // ApolloLink required for ApolloClient
-import { WebSocketLink } from 'apollo-link-ws';
-import { getMainDefinition } from 'apollo-utilities';
+import { WebSocketLink } from 'apollo-link-ws'; // WSLink for setting up subscriptions
+import { getMainDefinition } from 'apollo-utilities'; // to split queries based on query type
 
-import createFileLink from './createFileLink';
+import createFileLink from './createFileLink'; // our personal implementation of the createHTTPLink
 
 // creating an HTTPLink with the uri pointing to the graphql enpoint of the server
 const httpLink = createFileLink({
@@ -46,6 +46,9 @@ const afterwareLink = new ApolloLink((operation, forward) => forward(operation).
   return response;
 }));
 
+// creating a websocketlink for setting up subscriptions. We need to pass it some additional
+// options such as lazy true so that it fetches the token and refreshToken everytime and
+// updates them on every login, instead of using the ones from the previous localStorage.
 export const wsLink = new WebSocketLink({
   uri: 'ws://localhost:3000/subscriptions',
   options: {

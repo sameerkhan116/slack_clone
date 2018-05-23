@@ -1,3 +1,6 @@
+// formatting the errors based on their path and mesasge.
+// if the error has already been received, we push similar
+// errors into that the array representing this error.
 export default errors =>
   errors.reduce((acc, cv) => {
     if (cv.path in acc) {

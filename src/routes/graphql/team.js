@@ -1,6 +1,10 @@
-import gql from 'graphql-tag';
+// Here are a couple of queries that we use multiple times for updating
+// cache etc, and hence we store them in a seperate file so that they can
+// be re-used.
 
-/* eslint-disable */
+import gql from 'graphql-tag'; // for creating graphql queries
+
+// the ME query to get the currentUsers id, username, teams, channel etc.
 export const ME = gql`
 {
   me {
@@ -24,6 +28,7 @@ export const ME = gql`
 }
 `;
 
+// query for getting team members for a particular team
 export const GET_TEAM_MEMBERS = gql`
 query($teamId: Int!) {
   getTeamMembers(teamId: $teamId) {
