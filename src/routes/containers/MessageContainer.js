@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Comment, Image } from 'semantic-ui-react';
+import { Comment, Image, Button } from 'semantic-ui-react';
 
 import FileUpload from '../components/FileUpload';
 import RenderText from '../components/RenderText';
@@ -41,6 +41,10 @@ const Message = ({ message: { url, text, filetype } }) => {
 };
 
 class MessageContainer extends Component {
+  state = {
+    hasMoreItems: true,
+  }
+
   componentWillMount() {
     this.unsubscribe = this.subscribe(this.props.channelId);
   }
@@ -74,15 +78,15 @@ class MessageContainer extends Component {
         return {
           ...prev,
           messages: [
-            ...prev.messages,
             subscriptionData.data.newChannelMessage,
+            ...prev.messages,
           ],
         };
       },
     });
 
   render() {
-    const { data: { loading, messages }, channelId } = this.props;
+    const { data: { loading, messages, fetchMore }, channelId } = this.props;
     if (loading) {
       return null;
     }
@@ -101,7 +105,33 @@ class MessageContainer extends Component {
         disableClick
       >
         <Comment.Group>
-          {messages.map(m => (
+          {this.state.hasMoreItems && messages.length >= 35 && (
+            <Button onClick={() =>
+              fetchMore({
+                variables: {
+                  channelId,
+                  cursor: messages[messages.length - 1].created_at,
+                },
+                updateQuery: (previousResult, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) {
+                    return previousResult;
+                  }
+                  if (fetchMoreResult.messages.length < 35) {
+                    this.setState({
+                      hasMoreItems: false,
+                    });
+                  }
+                  return {
+                    ...previousResult,
+                    messages: [...previousResult.messages, ...fetchMoreResult.messages],
+                  };
+                },
+              })
+            }
+            >Load more
+            </Button>
+          )}
+          {messages.slice().reverse().map(m => (
             <Comment key={`${m.id}`}>
               <Comment.Content>
                 <Comment.Author as="a">{m.user.username}</Comment.Author>
@@ -122,8 +152,8 @@ class MessageContainer extends Component {
 }
 
 const messagesQuery = gql`
-  query($channelId: Int!) {
-    messages(channelId: $channelId) {
+  query($cursor: String, $channelId: Int!) {
+    messages(cursor: $cursor, channelId: $channelId) {
       id
       text
       user {
@@ -137,10 +167,10 @@ const messagesQuery = gql`
 `;
 
 export default graphql(messagesQuery, {
-  variables: ({ channelId }) => ({
-    channelId,
-  }),
-  options: {
+  options: ({ channelId }) => ({
+    variables: {
+      channelId,
+    },
     fetchPolicy: 'network-only',
-  },
+  }),
 })(MessageContainer);

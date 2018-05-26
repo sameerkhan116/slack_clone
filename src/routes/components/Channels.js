@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
+// the channelWrapper styled div which is the second grid column of the 3 we created
+// the grid row starts at line 1 and ends at line 4
 const ChannelWrapper = styled.div`
   grid-column: 2;
   grid-row: 1 / 4;
@@ -10,17 +12,20 @@ const ChannelWrapper = styled.div`
   color: #958993;
 `;
 
+// the teamNameHeader which is a styled h1.
 const TeamNameHeader = styled.h1`
   color: #fff;
   font-size: 20px;
 `;
 
+// the sidebarlist which is a styled unordered list.
 const SideBarList = styled.ul`
   width: 100%;
   list-style: none;
   padding-left: 0px;
 `;
 
+// the item which is a part of the list we created above.
 const SideBarListItem = styled.li`
   padding: 1.5px;
   padding-left: 10px;

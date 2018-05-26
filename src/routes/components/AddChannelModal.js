@@ -104,6 +104,7 @@ const CREATE_CHANNEL = gql`
       channel {
         id
         name
+        dm
       }
     }
   }
@@ -164,7 +165,7 @@ export default compose(
           store.writeQuery({ query, data });
         },
       });
-      // console.log(response);
+      console.log(response);
       onClose();
       setSubmitting(false);
     },
