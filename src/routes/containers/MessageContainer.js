@@ -58,13 +58,15 @@ class MessageContainer extends Component {
     }
 
     if (this.scroller &&
-      this.scroller.scrollTop < 100 &&
+      this.scroller.scrollTop < 20 &&
       this.props.data.messages &&
       messages &&
       this.props.data.messages.length !== messages.length) {
       const heightBeforeRender = this.scroller.scrollHeight;
       setTimeout(() => {
-        this.scroller.scrollTop = this.scroller.scrollHeight - heightBeforeRender;
+        if (this.scroller) {
+          this.scroller.scrollTop = this.scroller.scrollHeight - heightBeforeRender;
+        }
       }, 120);
     }
   }
